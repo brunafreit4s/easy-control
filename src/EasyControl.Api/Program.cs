@@ -1,6 +1,11 @@
 using System.Text;
 using AutoMapper;
+using EasyControl.Api.AutoMapper;
 using EasyControl.Api.Data;
+using EasyControl.Api.Domain.Repository.Classes;
+using EasyControl.Api.Domain.Repository.Interfaces;
+using EasyControl.Api.Domain.Services.Classes;
+using EasyControl.Api.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -27,7 +32,7 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
         options.UseSqlServer(connectionString), ServiceLifetime.Transient, ServiceLifetime.Transient);
 
     var config = new MapperConfiguration(cfg => {
-        //cfg.AddProfile<UsuarioProfile>();
+        cfg.AddProfile<UsuarioProfile>();
         // cfg.AddProfile<NaturezaDeLancamentoProfile>();
         // cfg.AddProfile<ApagarProfile>();
         // cfg.AddProfile<AreceberProfile>();
@@ -38,10 +43,10 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     builder.Services
     .AddSingleton(builder.Configuration)
     .AddSingleton(builder.Environment)
-    .AddSingleton(mapper);
+    .AddSingleton(mapper)
     // .AddScoped<TokenService>()
-    // .AddScoped<IUsuarioRepository, UsuarioRepository>()
-    // .AddScoped<IUsuarioService, UsuarioService>()
+    .AddScoped<IUsuarioRepository, UsuarioRepository>()
+    .AddScoped<IUsuarioService, UsuarioService>();
     // .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>()
     // .AddScoped<IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long>, NaturezaDeLancamentoService>()
     // .AddScoped<IApagarRepository, ApagarRepository>()
@@ -53,7 +58,6 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
 // Configura o serviços da API.
 static void ConfigurarServices(WebApplicationBuilder builder)
 {
-
     builder.Services
     .AddCors()
     .AddControllers().ConfigureApiBehaviorOptions(options =>
