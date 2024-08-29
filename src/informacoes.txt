@@ -6,3 +6,16 @@ Criar Migrations
 
 Executar Migrations
     dotnet ef database update
+
+Criar uma nova Entidade:
+    1º Criar o Modelo 
+    2º Criar o Mapeamento
+    3º Adicionar o Mapeamento no ApplicationContext
+    4º Criar as migrações
+    5º Executar as migrações para atualizar a base
+
+Criar um CRUD:    
+    1º Criar o Repositório
+    2º Criar Contrato ou DTO
+    3º Criar o Serviço
+    4º Criar a Controller
