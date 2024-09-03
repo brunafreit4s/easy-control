@@ -6,8 +6,8 @@ namespace EasyControl.Api.Domain.Repository.Interfaces
     {
         Task<IEnumerable<T>> Obter(); 
         Task<T?> Obter(I id); 
-        Task<T> Adicionar(T endidade);
-        Task<T> Atualizar(T endidade);
-        Task Deletar(T endidade);
+        Task<T> Adicionar(T entidade);
+        Task<T> Atualizar(T entidade);
+        Task Deletar(T entidade);
     }
 }
