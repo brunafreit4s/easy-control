@@ -1,5 +1,4 @@
-using System.Security.Authentication;
-using EasyControl.Api.Contract.Usuario;
+using EasyControl.Api.Contract.NaturezaDeLancamento;
 using EasyControl.Api.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,38 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace EasyControl.Api.Controllers
 {
     [ApiController]
-    [Route("usuarios")]
-    public class UsuarioController : BaseController
+    [Route("naturezasdelancamento")]
+    public class NaturezaDeLancamentoController : BaseController
     {
-        private readonly IUsuarioService _usuarioService;
-        public UsuarioController(IUsuarioService usuarioService)
+        private readonly IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long> _NaturezaDeLancamentoService;
+        public NaturezaDeLancamentoController(IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long> NaturezaDeLancamentoService)
         {
-            _usuarioService = usuarioService;
-        }
-
-        [HttpPost]
-        [Route("login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Autenticar(UsuarioLoginRequestContract contract){
-            try
-            {
-                return Ok(await _usuarioService.Autenticar(contract));
-            }
-            catch(AuthenticationException ex){
-                return Unauthorized(new {StatusCode = 402, message = ex.Message});
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
+            _NaturezaDeLancamentoService = NaturezaDeLancamentoService;
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Adicionar(UsuarioRequestContract contract){
+        public async Task<IActionResult> Adicionar(NaturezaDeLancamentoRequestContract contract){
             try
             {
-                return Created("",await _usuarioService.Adicionar(contract, 0));
+                long idUsuario = ObterIdUsuarioLogado();
+                return Created("",await _NaturezaDeLancamentoService.Adicionar(contract, idUsuario));
             }
             catch (Exception ex)
             {
@@ -51,7 +34,8 @@ namespace EasyControl.Api.Controllers
         public async Task<IActionResult> Obter(){
             try
             {
-                return Ok(await _usuarioService.Obter(0));
+                long idUsuario = ObterIdUsuarioLogado();
+                return Ok(await _NaturezaDeLancamentoService.Obter(idUsuario));
             }
             catch (Exception ex)
             {
@@ -65,7 +49,8 @@ namespace EasyControl.Api.Controllers
         public async Task<IActionResult> Obter(long id){
             try
             {
-                return Ok(await _usuarioService.Obter(id, 0));
+                long idUsuario = ObterIdUsuarioLogado();
+                return Ok(await _NaturezaDeLancamentoService.Obter(id, idUsuario));
             }
             catch (Exception ex)
             {
@@ -76,10 +61,11 @@ namespace EasyControl.Api.Controllers
         [HttpPut]
         [Route("{id}")]
         [Authorize]
-        public async Task<IActionResult> Atualizar(long id, UsuarioRequestContract contract){
+        public async Task<IActionResult> Atualizar(long id, NaturezaDeLancamentoRequestContract contract){
             try
             {
-                return Ok(await _usuarioService.Atualizar(id, contract, 0));
+                long idUsuario = ObterIdUsuarioLogado();
+                return Ok(await _NaturezaDeLancamentoService.Atualizar(id, contract, idUsuario));
             }
             catch (Exception ex)
             {
@@ -93,7 +79,8 @@ namespace EasyControl.Api.Controllers
         public async Task<IActionResult> Deletar(long id){
             try
             {
-                await _usuarioService.Inativar(id, 0);
+                long idUsuario = ObterIdUsuarioLogado();
+                await _NaturezaDeLancamentoService.Inativar(id, idUsuario);
                 return NoContent();
             }
             catch (Exception ex)
