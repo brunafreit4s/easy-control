@@ -1,3 +1,4 @@
+using System.Security.Authentication;
 using EasyControl.Api.Contract.Usuario;
 using EasyControl.Api.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,24 @@ namespace EasyControl.Api.Controllers
         }
 
         [HttpPost]
+        [Route("login")]
         [AllowAnonymous]
+        public async Task<IActionResult> Autenticar(UsuarioLoginRequestContract contract){
+            try
+            {
+                return Ok(await _usuarioService.Autenticar(contract));
+            }
+            catch(AuthenticationException ex){
+                return Unauthorized(new {StatusCode = 402, message = ex.Message});
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Adicionar(UsuarioRequestContract contract){
             try
             {
@@ -29,7 +47,7 @@ namespace EasyControl.Api.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> Obter(){
             try
             {
@@ -43,7 +61,7 @@ namespace EasyControl.Api.Controllers
         
         [HttpGet]
         [Route("{id}")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> Obter(long id){
             try
             {
@@ -54,23 +72,10 @@ namespace EasyControl.Api.Controllers
                 return Problem(ex.Message);
             }
         }
-
-        // [HttpGet]
-        // [AllowAnonymous]
-        // public async Task<IActionResult> Obter(string email){
-        //     try
-        //     {
-        //         return Ok(await _usuarioService.Obter(email));
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return Problem(ex.Message);
-        //     }
-        // }
         
         [HttpPut]
         [Route("{id}")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> Atualizar(long id, UsuarioRequestContract contract){
             try
             {
@@ -84,7 +89,7 @@ namespace EasyControl.Api.Controllers
         
         [HttpDelete]
         [Route("{id}")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> Deletar(long id){
             try
             {
