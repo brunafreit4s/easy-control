@@ -1,3 +1,4 @@
+using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
@@ -12,15 +13,28 @@ namespace EasyControl.Api.Domain.Services.Classes
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IMapper _mapper;
+        private readonly TokenService _tokenService;
 
-        public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper){
-            _usuarioRepository = usuarioRepository;
+        public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper, TokenService tokenService){
+            _usuarioRepository = usuarioRepository;            
             _mapper = mapper;
+            _tokenService = tokenService;
         }
 
-        public Task<UsuarioLoginResponseContract> Autenticar(UsuarioLoginRequestContract usuarioLoginRequest)
+        public async Task<UsuarioLoginResponseContract> Autenticar(UsuarioLoginRequestContract usuarioLoginRequest)
         {
-            throw new NotImplementedException();
+            var usuario = await Obter(usuarioLoginRequest.Email);
+            var hashSenha = GerarHashSenha(usuarioLoginRequest.Senha);
+
+            if(usuario is null || usuario.Senha != hashSenha) {
+                throw new AuthenticationException("Usuário ou Senha inválido.");
+            }
+
+            return new UsuarioLoginResponseContract{
+                Id = usuario.Id,
+                Email = usuario.Email,
+                Token = _tokenService.ObterToken(_mapper.Map<Usuario>(usuario)),
+            };
         }
 
         public async Task<UsuarioResponseContract> Adicionar(UsuarioRequestContract entidade, long idUsuario)

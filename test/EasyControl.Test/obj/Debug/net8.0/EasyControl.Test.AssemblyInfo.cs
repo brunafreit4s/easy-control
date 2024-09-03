@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EasyControl.Test")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b0ecb5986bbb3b241f7fdf517a7c71f95faec84")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+26e7625b0ba0437b4d52aaa454384913ae0a3fe6")]
 [assembly: System.Reflection.AssemblyProductAttribute("EasyControl.Test")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EasyControl.Test")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
