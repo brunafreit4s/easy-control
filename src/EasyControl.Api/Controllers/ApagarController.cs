@@ -1,4 +1,4 @@
-using EasyControl.Api.Contract.NaturezaDeLancamento;
+using EasyControl.Api.Contract.Apagar;
 using EasyControl.Api.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,22 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace EasyControl.Api.Controllers
 {
     [ApiController]
-    [Route("naturezas-de-lancamento")]
-    public class NaturezaDeLancamentoController : BaseController
+    [Route("titulos-apagar")]
+    public class ApagarController : BaseController
     {
-        private readonly IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long> _naturezaDeLancamentoServiceaturezaDeLancamentoService;
-        public NaturezaDeLancamentoController(IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long> NaturezaDeLancamentoService)
+        private readonly IService<ApagarRequestContract, ApagarResponseContract, long> _apagarService;
+        public ApagarController(IService<ApagarRequestContract, ApagarResponseContract, long> ApagarService)
         {
-            _naturezaDeLancamentoServiceaturezaDeLancamentoService = NaturezaDeLancamentoService;
+            _apagarService = ApagarService;
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Adicionar(NaturezaDeLancamentoRequestContract contract){
+        public async Task<IActionResult> Adicionar(ApagarRequestContract contract){
             try
             {
                 long idUsuario = ObterIdUsuarioLogado();
-                return Created("",await _naturezaDeLancamentoServiceaturezaDeLancamentoService.Adicionar(contract, idUsuario));
+                return Created("",await _apagarService.Adicionar(contract, idUsuario));
             }
             catch (Exception ex)
             {
@@ -35,7 +35,7 @@ namespace EasyControl.Api.Controllers
             try
             {
                 long idUsuario = ObterIdUsuarioLogado();
-                return Ok(await _naturezaDeLancamentoServiceaturezaDeLancamentoService.Obter(idUsuario));
+                return Ok(await _apagarService.Obter(idUsuario));
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace EasyControl.Api.Controllers
             try
             {
                 long idUsuario = ObterIdUsuarioLogado();
-                return Ok(await _naturezaDeLancamentoServiceaturezaDeLancamentoService.Obter(id, idUsuario));
+                return Ok(await _apagarService.Obter(id, idUsuario));
             }
             catch (Exception ex)
             {
@@ -61,11 +61,11 @@ namespace EasyControl.Api.Controllers
         [HttpPut]
         [Route("{id}")]
         [Authorize]
-        public async Task<IActionResult> Atualizar(long id, NaturezaDeLancamentoRequestContract contract){
+        public async Task<IActionResult> Atualizar(long id, ApagarRequestContract contract){
             try
             {
                 long idUsuario = ObterIdUsuarioLogado();
-                return Ok(await _naturezaDeLancamentoServiceaturezaDeLancamentoService.Atualizar(id, contract, idUsuario));
+                return Ok(await _apagarService.Atualizar(id, contract, idUsuario));
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace EasyControl.Api.Controllers
             try
             {
                 long idUsuario = ObterIdUsuarioLogado();
-                await _naturezaDeLancamentoServiceaturezaDeLancamentoService.Inativar(id, idUsuario);
+                await _apagarService.Inativar(id, idUsuario);
                 return NoContent();
             }
             catch (Exception ex)
