@@ -1,5 +1,6 @@
 using EasyControl.Api.Contract.Areceber;
 using EasyControl.Api.Domain.Services.Interfaces;
+using EasyControl.Api.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,9 +21,12 @@ namespace EasyControl.Api.Controllers
         public async Task<IActionResult> Adicionar(AreceberRequestContract contract){
             try
             {
-                long idUsuario = ObterIdUsuarioLogado();
-                return Created("",await _areceberService.Adicionar(contract, idUsuario));
+                _idUsuario = ObterIdUsuarioLogado();
+                return Created("",await _areceberService.Adicionar(contract, _idUsuario));
             }
+            catch (BadRequestException ex){
+                return BadRequest(ReturnBadRequest(ex));
+            }  
             catch (Exception ex)
             {
                 return Problem(ex.Message);
@@ -34,8 +38,11 @@ namespace EasyControl.Api.Controllers
         public async Task<IActionResult> Obter(){
             try
             {
-                long idUsuario = ObterIdUsuarioLogado();
-                return Ok(await _areceberService.Obter(idUsuario));
+                _idUsuario = ObterIdUsuarioLogado();
+                return Ok(await _areceberService.Obter(_idUsuario));
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
             }
             catch (Exception ex)
             {
@@ -49,8 +56,11 @@ namespace EasyControl.Api.Controllers
         public async Task<IActionResult> Obter(long id){
             try
             {
-                long idUsuario = ObterIdUsuarioLogado();
-                return Ok(await _areceberService.Obter(id, idUsuario));
+                _idUsuario = ObterIdUsuarioLogado();
+                return Ok(await _areceberService.Obter(id, _idUsuario));
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
             }
             catch (Exception ex)
             {
@@ -64,9 +74,15 @@ namespace EasyControl.Api.Controllers
         public async Task<IActionResult> Atualizar(long id, AreceberRequestContract contract){
             try
             {
-                long idUsuario = ObterIdUsuarioLogado();
-                return Ok(await _areceberService.Atualizar(id, contract, idUsuario));
+                _idUsuario = ObterIdUsuarioLogado();
+                return Ok(await _areceberService.Atualizar(id, contract, _idUsuario));
             }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
+            }
+            catch (BadRequestException ex){
+                return BadRequest(ReturnBadRequest(ex));
+            }  
             catch (Exception ex)
             {
                 return Problem(ex.Message);
@@ -79,9 +95,12 @@ namespace EasyControl.Api.Controllers
         public async Task<IActionResult> Deletar(long id){
             try
             {
-                long idUsuario = ObterIdUsuarioLogado();
-                await _areceberService.Inativar(id, idUsuario);
+                _idUsuario = ObterIdUsuarioLogado();
+                await _areceberService.Inativar(id, _idUsuario);
                 return NoContent();
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
             }
             catch (Exception ex)
             {
