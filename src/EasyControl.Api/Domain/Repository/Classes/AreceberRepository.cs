@@ -24,7 +24,7 @@ namespace EasyControl.Api.Domain.Repository.Classes
         {
             Areceber entidadeBanco = await _contexto.Areceber                
                 .Where(a => a.Id == entidade.Id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(); 
 
             _contexto.Entry(entidadeBanco).CurrentValues.SetValues(entidade);
             _contexto.Update<Areceber>(entidadeBanco);

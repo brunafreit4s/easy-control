@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EasyControl.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b845a93b46d9c7f573b0acbb117df5c211cc5fdf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+46ec82b2885e8b7255f156365b539388ed637a08")]
 [assembly: System.Reflection.AssemblyProductAttribute("EasyControl.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EasyControl.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
