@@ -6,6 +6,7 @@ using EasyControl.Api.Contract.Usuario;
 using EasyControl.Api.Domain.Models;
 using EasyControl.Api.Domain.Repository.Interfaces;
 using EasyControl.Api.Domain.Services.Interfaces;
+using EasyControl.Api.Exceptions;
 
 namespace EasyControl.Api.Domain.Services.Classes
 {
@@ -62,7 +63,7 @@ namespace EasyControl.Api.Domain.Services.Classes
 
         public async Task<UsuarioResponseContract> Atualizar(long id, UsuarioRequestContract entidade, long idUsuario)
         {
-            _ = await Obter(id) ?? throw new Exception("Usuário não encontrado para atualização!");
+            _ = await Obter(id) ?? throw new NotFoundException("Usuário não encontrado para atualização!");
 
             var usuario = _mapper.Map<Usuario>(entidade);
             usuario.Id = id;
@@ -74,7 +75,7 @@ namespace EasyControl.Api.Domain.Services.Classes
 
         public async Task Inativar(long id, long idUsuario)
         {
-            var usuario = await _usuarioRepository.Obter(id) ?? throw new Exception("Usuário não encontrado para inativação!");
+            var usuario = await _usuarioRepository.Obter(id) ?? throw new NotFoundException("Usuário não encontrado para inativação!");
             await _usuarioRepository.Deletar(_mapper.Map<Usuario>(usuario));
         }
 
