@@ -1,6 +1,7 @@
 using System.Security.Authentication;
 using EasyControl.Api.Contract.Usuario;
 using EasyControl.Api.Domain.Services.Interfaces;
+using EasyControl.Api.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +26,7 @@ namespace EasyControl.Api.Controllers
                 return Ok(await _usuarioService.Autenticar(contract));
             }
             catch(AuthenticationException ex){
-                return Unauthorized(new {StatusCode = 402, message = ex.Message});
+                return Unauthorized(ReturnUnauthorized(ex));
             }
             catch (Exception ex)
             {
@@ -40,6 +41,9 @@ namespace EasyControl.Api.Controllers
             {
                 return Created("",await _usuarioService.Adicionar(contract, 0));
             }
+            catch (BadRequestException ex){
+                return BadRequest(ReturnBadRequest(ex));
+            }  
             catch (Exception ex)
             {
                 return Problem(ex.Message);
@@ -52,6 +56,9 @@ namespace EasyControl.Api.Controllers
             try
             {
                 return Ok(await _usuarioService.Obter(0));
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
             }
             catch (Exception ex)
             {
@@ -67,6 +74,9 @@ namespace EasyControl.Api.Controllers
             {
                 return Ok(await _usuarioService.Obter(id, 0));
             }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
+            }
             catch (Exception ex)
             {
                 return Problem(ex.Message);
@@ -81,6 +91,12 @@ namespace EasyControl.Api.Controllers
             {
                 return Ok(await _usuarioService.Atualizar(id, contract, 0));
             }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
+            }
+            catch (BadRequestException ex){
+                return BadRequest(ReturnBadRequest(ex));
+            }  
             catch (Exception ex)
             {
                 return Problem(ex.Message);
@@ -95,6 +111,9 @@ namespace EasyControl.Api.Controllers
             {
                 await _usuarioService.Inativar(id, 0);
                 return NoContent();
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
             }
             catch (Exception ex)
             {

@@ -3,6 +3,7 @@ using EasyControl.Api.Contract.Areceber;
 using EasyControl.Api.Domain.Models;
 using EasyControl.Api.Domain.Repository.Interfaces;
 using EasyControl.Api.Domain.Services.Interfaces;
+using EasyControl.Api.Exceptions;
 
 namespace EasyControl.Api.Domain.Services.Classes
 {
@@ -18,6 +19,8 @@ namespace EasyControl.Api.Domain.Services.Classes
 
         public async Task<AreceberResponseContract> Adicionar(AreceberRequestContract entidade, long idUsuario)
         {
+            Validar(entidade);
+
             var areceber = _mapper.Map<Areceber>(entidade);
 
             areceber.DataCadastro = DateTime.Now;
@@ -29,6 +32,8 @@ namespace EasyControl.Api.Domain.Services.Classes
 
         public async Task<AreceberResponseContract> Atualizar(long id, AreceberRequestContract entidade, long idUsuario)
         {        
+            Validar(entidade);
+            
             Areceber areceber = await ObterVinculoUsuario(id, idUsuario);
 
             var contrato = _mapper.Map<Areceber>(entidade);
@@ -71,10 +76,14 @@ namespace EasyControl.Api.Domain.Services.Classes
         private async Task<Areceber> ObterVinculoUsuario(long id, long idUsuario){
             var areceber = await _areceberRepository.Obter(id);
             if (areceber is null || areceber.IdUsuario != idUsuario){
-                throw new Exception($"Não foi encontrada nenhuma título a pagar pelo id {id}");
+                throw new NotFoundException($"Não foi encontrada nenhuma título a pagar pelo id {id}");
             }
 
             return areceber;
+        }
+
+        private void Validar(AreceberRequestContract entidade){
+            if(entidade.ValorOriginal < 0 || entidade.ValorRecebido < 0) { throw new BadRequestException("Os campos de valor original e valor de recebimento, não podem ser negativos!"); }
         }
     }
 }

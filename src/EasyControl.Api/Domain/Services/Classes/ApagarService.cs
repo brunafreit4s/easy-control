@@ -3,6 +3,7 @@ using EasyControl.Api.Contract.Apagar;
 using EasyControl.Api.Domain.Models;
 using EasyControl.Api.Domain.Repository.Interfaces;
 using EasyControl.Api.Domain.Services.Interfaces;
+using EasyControl.Api.Exceptions;
 
 namespace EasyControl.Api.Domain.Services.Classes
 {
@@ -18,6 +19,8 @@ namespace EasyControl.Api.Domain.Services.Classes
 
         public async Task<ApagarResponseContract> Adicionar(ApagarRequestContract entidade, long idUsuario)
         {
+            Validar(entidade);
+
             var apagar = _mapper.Map<Apagar>(entidade);
 
             apagar.DataCadastro = DateTime.Now;
@@ -29,6 +32,8 @@ namespace EasyControl.Api.Domain.Services.Classes
 
         public async Task<ApagarResponseContract> Atualizar(long id, ApagarRequestContract entidade, long idUsuario)
         {        
+            Validar(entidade);
+            
             Apagar apagar = await ObterVinculoUsuario(id, idUsuario);
 
             var contrato = _mapper.Map<Apagar>(entidade);
@@ -71,10 +76,14 @@ namespace EasyControl.Api.Domain.Services.Classes
         private async Task<Apagar> ObterVinculoUsuario(long id, long idUsuario){
             var apagar = await _apagarRepository.Obter(id);
             if (apagar is null || apagar.IdUsuario != idUsuario){
-                throw new Exception($"Não foi encontrada nenhuma título a pagar pelo id {id}");
+                throw new NotFoundException($"Não foi encontrada nenhuma título a pagar pelo id {id}");
             }
 
             return apagar;
+        }
+    
+        private void Validar(ApagarRequestContract entidade){
+            if(entidade.ValorOriginal < 0 || entidade.ValorPago < 0) { throw new BadRequestException("Os campos de valor original e valor de recebimento, não podem ser negativos!"); }
         }
     }
 }

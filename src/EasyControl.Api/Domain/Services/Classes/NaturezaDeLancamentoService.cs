@@ -3,6 +3,7 @@ using EasyControl.Api.Contract.NaturezaDeLancamento;
 using EasyControl.Api.Domain.Models;
 using EasyControl.Api.Domain.Repository.Interfaces;
 using EasyControl.Api.Domain.Services.Interfaces;
+using EasyControl.Api.Exceptions;
 
 namespace EasyControl.Api.Domain.Services.Classes
 {
@@ -59,7 +60,7 @@ namespace EasyControl.Api.Domain.Services.Classes
         private async Task<NaturezaDeLancamento> ObterVinculoUsuario(long id, long idUsuario){
             var naturezaDeLancamento = await _naturezaDeLancamentoRepository.Obter(id);
             if (naturezaDeLancamento is null || naturezaDeLancamento.IdUsuario != idUsuario){
-                throw new Exception($"Não foi encontrada nenhuma natureza de lançamento pelo id {id}");
+                throw new NotFoundException($"Não foi encontrada nenhuma natureza de lançamento pelo id {id}");
             }
 
             return naturezaDeLancamento;
