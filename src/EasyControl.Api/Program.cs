@@ -2,6 +2,7 @@ using System.Text;
 using AutoMapper;
 using EasyControl.Api.AutoMapper;
 using EasyControl.Api.Contract.Apagar;
+using EasyControl.Api.Contract.Areceber;
 using EasyControl.Api.Contract.NaturezaDeLancamento;
 using EasyControl.Api.Data;
 using EasyControl.Api.Domain.Repository.Classes;
@@ -37,7 +38,7 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
         cfg.AddProfile<UsuarioProfile>();
         cfg.AddProfile<NaturezaDeLancamentoProfile>();
         cfg.AddProfile<ApagarProfile>();
-        // cfg.AddProfile<AreceberProfile>();
+        cfg.AddProfile<AreceberProfile>();
     });
 
     IMapper mapper = config.CreateMapper();
@@ -52,9 +53,9 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>()
     .AddScoped<IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long>, NaturezaDeLancamentoService>()
     .AddScoped<IApagarRepository, ApagarRepository>()
-    .AddScoped<IService<ApagarRequestContract, ApagarResponseContract, long>, ApagarService>();
-    // .AddScoped<IAreceberRepository, AreceberRepository>()
-    // .AddScoped<IService<AreceberRequestContract, AreceberResponseContract, long>, AreceberService>();
+    .AddScoped<IService<ApagarRequestContract, ApagarResponseContract, long>, ApagarService>()
+    .AddScoped<IAreceberRepository, AreceberRepository>()
+    .AddScoped<IService<AreceberRequestContract, AreceberResponseContract, long>, AreceberService>();
 }
 
 // Configura o serviços da API.
