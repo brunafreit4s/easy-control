@@ -10,10 +10,10 @@ namespace EasyControl.Api.Controllers
     [Route("naturezas-de-lancamento")]
     public class NaturezaDeLancamentoController : BaseController
     {
-        private readonly IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long> _naturezaDeLancamentoServiceaturezaDeLancamentoService;
-        public NaturezaDeLancamentoController(IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long> NaturezaDeLancamentoService)
+        private readonly INaturezaDeLancamentoService _naturezaDeLancamentoService;
+        public NaturezaDeLancamentoController(INaturezaDeLancamentoService NaturezaDeLancamentoService)
         {
-            _naturezaDeLancamentoServiceaturezaDeLancamentoService = NaturezaDeLancamentoService;
+            _naturezaDeLancamentoService = NaturezaDeLancamentoService;
         }
 
         [HttpPost]
@@ -22,7 +22,7 @@ namespace EasyControl.Api.Controllers
             try
             {
                 _idUsuario = ObterIdUsuarioLogado();
-                return Created("",await _naturezaDeLancamentoServiceaturezaDeLancamentoService.Adicionar(contract, _idUsuario));
+                return Created("",await _naturezaDeLancamentoService.Adicionar(contract, _idUsuario));
             }
             catch (BadRequestException ex){
                 return BadRequest(ReturnBadRequest(ex));
@@ -39,7 +39,24 @@ namespace EasyControl.Api.Controllers
             try
             {
                 _idUsuario = ObterIdUsuarioLogado();
-                return Ok(await _naturezaDeLancamentoServiceaturezaDeLancamentoService.Obter(_idUsuario));
+                return Ok(await _naturezaDeLancamentoService.Obter(_idUsuario));
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("ativos")]
+        [Authorize]
+        public async Task<IActionResult> ObterAtivos(bool ativos){
+            try
+            {
+                return Ok(await _naturezaDeLancamentoService.ObterAtivos(ativos));
             }
             catch(NotFoundException ex){
                 return NotFound(ReturnNotFound(ex));
@@ -57,7 +74,7 @@ namespace EasyControl.Api.Controllers
             try
             {
                 _idUsuario = ObterIdUsuarioLogado();
-                return Ok(await _naturezaDeLancamentoServiceaturezaDeLancamentoService.Obter(id, _idUsuario));
+                return Ok(await _naturezaDeLancamentoService.Obter(id, _idUsuario));
             }
             catch(NotFoundException ex){
                 return NotFound(ReturnNotFound(ex));
@@ -75,7 +92,7 @@ namespace EasyControl.Api.Controllers
             try
             {
                 _idUsuario = ObterIdUsuarioLogado();
-                return Ok(await _naturezaDeLancamentoServiceaturezaDeLancamentoService.Atualizar(id, contract, _idUsuario));
+                return Ok(await _naturezaDeLancamentoService.Atualizar(id, contract, _idUsuario));
             }
             catch(NotFoundException ex){
                 return NotFound(ReturnNotFound(ex));
@@ -96,7 +113,7 @@ namespace EasyControl.Api.Controllers
             try
             {
                 _idUsuario = ObterIdUsuarioLogado();
-                await _naturezaDeLancamentoServiceaturezaDeLancamentoService.Inativar(id, _idUsuario);
+                await _naturezaDeLancamentoService.Inativar(id, _idUsuario);
                 return NoContent();
             }
             catch(NotFoundException ex){

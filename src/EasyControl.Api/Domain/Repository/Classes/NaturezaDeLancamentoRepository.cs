@@ -55,6 +55,22 @@ namespace EasyControl.Api.Domain.Repository.Classes
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<NaturezaDeLancamento>> ObterAtivos(bool ativos)
+        {
+            if (ativos){
+                return await _contexto.NaturezaDeLancamento.AsNoTracking()
+                    .Where(n => n.DataInativacao == null)
+                    .OrderBy(n => n.Id)
+                    .ToListAsync();
+            }
+            else{
+                return await _contexto.NaturezaDeLancamento.AsNoTracking()
+                    .Where(n => n.DataInativacao != null)
+                    .OrderBy(n => n.Id)
+                    .ToListAsync();
+            }
+        }
+
         public async Task<IEnumerable<NaturezaDeLancamento>> ObterPeloIdUsuario(long idUsuario)
         {
             return await _contexto.NaturezaDeLancamento.AsNoTracking()

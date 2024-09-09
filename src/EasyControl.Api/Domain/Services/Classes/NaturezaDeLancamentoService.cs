@@ -7,7 +7,8 @@ using EasyControl.Api.Exceptions;
 
 namespace EasyControl.Api.Domain.Services.Classes
 {
-    public class NaturezaDeLancamentoService : IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long>
+    //public class NaturezaDeLancamentoService : IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long>
+    public class NaturezaDeLancamentoService : INaturezaDeLancamentoService
     {
         private readonly INaturezaDeLancamentoRepository _naturezaDeLancamentoRepository;
         private readonly IMapper _mapper;
@@ -55,6 +56,12 @@ namespace EasyControl.Api.Domain.Services.Classes
         {
             NaturezaDeLancamento natureza = await ObterVinculoUsuario(id, idUsuario);
              return _mapper.Map<NaturezaDeLancamentoResponseContract>(natureza);
+        }
+
+        public async Task<IEnumerable<NaturezaDeLancamentoResponseContract>> ObterAtivos(bool ativos)
+        {
+            var naturezasDeLancamento = await _naturezaDeLancamentoRepository.ObterAtivos(ativos);
+            return naturezasDeLancamento.Select(n => _mapper.Map<NaturezaDeLancamentoResponseContract>(n));
         }
 
         private async Task<NaturezaDeLancamento> ObterVinculoUsuario(long id, long idUsuario){
