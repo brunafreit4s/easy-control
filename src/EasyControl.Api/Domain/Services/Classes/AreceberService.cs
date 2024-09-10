@@ -77,7 +77,7 @@ namespace EasyControl.Api.Domain.Services.Classes
         {
             var titulos = await _areceberRepository.ObterNaturezasVinculadas(idNaturezaDeLancamento);
             if(titulos is null || titulos.Count() == 0){
-                throw new NotFoundException($"Não foi encontrado nenhum título vinculado a natureza de id {idNaturezaDeLancamento}");
+                throw new NotFoundException($"Não foi encontrado nenhum título a receber com o vínculo com a natureza de lançamento de id {idNaturezaDeLancamento}");
             }
             var listTitulos = _mapper.Map<IEnumerable<AreceberRequestContract>>(titulos);
             return listTitulos;

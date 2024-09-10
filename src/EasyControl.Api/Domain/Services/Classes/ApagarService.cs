@@ -7,7 +7,7 @@ using EasyControl.Api.Exceptions;
 
 namespace EasyControl.Api.Domain.Services.Classes
 {
-    public class ApagarService : IService<ApagarRequestContract, ApagarResponseContract, long>
+    public class ApagarService : IApagarService
     {
         private readonly IApagarRepository _apagarRepository;
         private readonly IMapper _mapper;
@@ -81,6 +81,16 @@ namespace EasyControl.Api.Domain.Services.Classes
 
             return apagar;
         }
+
+        public async Task<IEnumerable<ApagarRequestContract>> ObterNaturezasVinculadas(long idNaturezaDeLancamento)
+        {
+            var titulos = await _apagarRepository.ObterNaturezasVinculadas(idNaturezaDeLancamento);
+            if(titulos is null || titulos.Count() == 0){
+                throw new NotFoundException($"Não foi encontrado nenhum título a pagar com o vínculo com a natureza de lançamento de id {idNaturezaDeLancamento}");
+            }
+            var listTitulos = _mapper.Map<IEnumerable<ApagarRequestContract>>(titulos);
+            return listTitulos;
+        }  
     
         private void Validar(ApagarRequestContract entidade){
             if(entidade.ValorOriginal < 0 || entidade.ValorPago < 0) { throw new BadRequestException("Os campos de valor original e valor de recebimento, não podem ser negativos!"); }

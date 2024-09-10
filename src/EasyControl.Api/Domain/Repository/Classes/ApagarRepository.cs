@@ -55,10 +55,18 @@ namespace EasyControl.Api.Domain.Repository.Classes
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Apagar>> ObterPeloIdUsuario(long idUsuario)
+        public async Task<IEnumerable<Apagar>> ObterPeloIdUsuario(long idUsuario)        
         {
             return await _contexto.Apagar.AsNoTracking()
                 .Where(a => a.IdUsuario == idUsuario)
+                .OrderBy(a => a.Id)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Apagar>> ObterNaturezasVinculadas(long idNaturezaDeLancamento)
+        {
+            return await _contexto.Apagar.AsNoTracking()
+                .Where(a => a.IdNaturezaDeLancamento == idNaturezaDeLancamento)
                 .OrderBy(a => a.Id)
                 .ToListAsync();
         }

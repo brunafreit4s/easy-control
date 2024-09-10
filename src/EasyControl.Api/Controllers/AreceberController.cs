@@ -48,24 +48,7 @@ namespace EasyControl.Api.Controllers
             {
                 return Problem(ex.Message);
             }
-        }
-
-        [HttpGet]
-        [Route("naturezas/vinculadas")]
-        [Authorize]
-        public async Task<IActionResult> ObterNaturezasVinculadas(long idNaturezaDeLancamento){
-            try
-            {
-                return Ok(await _areceberService.ObterNaturezasVinculadas(idNaturezaDeLancamento));
-            }
-            catch(NotFoundException ex){
-                return NotFound(ReturnNotFound(ex));
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
+        }        
         
         [HttpGet]
         [Route("{id}")]
@@ -115,6 +98,23 @@ namespace EasyControl.Api.Controllers
                 _idUsuario = ObterIdUsuarioLogado();
                 await _areceberService.Inativar(id, _idUsuario);
                 return NoContent();
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("naturezas/vinculadas")]
+        [Authorize]
+        public async Task<IActionResult> ObterNaturezasVinculadas(long idNaturezaDeLancamento){
+            try
+            {
+                return Ok(await _areceberService.ObterNaturezasVinculadas(idNaturezaDeLancamento));
             }
             catch(NotFoundException ex){
                 return NotFound(ReturnNotFound(ex));

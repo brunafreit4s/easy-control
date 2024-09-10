@@ -10,8 +10,8 @@ namespace EasyControl.Api.Controllers
     [Route("titulos-apagar")]
     public class ApagarController : BaseController
     {
-        private readonly IService<ApagarRequestContract, ApagarResponseContract, long> _apagarService;
-        public ApagarController(IService<ApagarRequestContract, ApagarResponseContract, long> ApagarService)
+        private readonly IApagarService _apagarService;
+        public ApagarController(IApagarService ApagarService)
         {
             _apagarService = ApagarService;
         }
@@ -102,6 +102,23 @@ namespace EasyControl.Api.Controllers
             catch(NotFoundException ex){
                 return NotFound(ReturnNotFound(ex));
             }           
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("naturezas/vinculadas")]
+        [Authorize]
+        public async Task<IActionResult> ObterNaturezasVinculadas(long idNaturezaDeLancamento){
+            try
+            {
+                return Ok(await _apagarService.ObterNaturezasVinculadas(idNaturezaDeLancamento));
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
+            }
             catch (Exception ex)
             {
                 return Problem(ex.Message);
