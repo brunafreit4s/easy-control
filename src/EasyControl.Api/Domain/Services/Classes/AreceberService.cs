@@ -7,7 +7,7 @@ using EasyControl.Api.Exceptions;
 
 namespace EasyControl.Api.Domain.Services.Classes
 {
-    public class AreceberService : IService<AreceberRequestContract, AreceberResponseContract, long>
+    public class AreceberService : IAreceberService
     {
         private readonly IAreceberRepository _areceberRepository;
         private readonly IMapper _mapper;
@@ -72,6 +72,16 @@ namespace EasyControl.Api.Domain.Services.Classes
             Areceber areceber = await ObterVinculoUsuario(id, idUsuario);
              return _mapper.Map<AreceberResponseContract>(areceber);
         }
+
+        public async Task<IEnumerable<AreceberRequestContract>> ObterNaturezasVinculadas(long idNaturezaDeLancamento)
+        {
+            var titulos = await _areceberRepository.ObterNaturezasVinculadas(idNaturezaDeLancamento);
+            if(titulos is null || titulos.Count() == 0){
+                throw new NotFoundException($"Não foi encontrado nenhum título vinculado a natureza de id {idNaturezaDeLancamento}");
+            }
+            var listTitulos = _mapper.Map<IEnumerable<AreceberRequestContract>>(titulos);
+            return listTitulos;
+        }   
 
         private async Task<Areceber> ObterVinculoUsuario(long id, long idUsuario){
             var areceber = await _areceberRepository.Obter(id);

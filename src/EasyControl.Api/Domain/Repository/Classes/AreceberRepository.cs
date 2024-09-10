@@ -62,5 +62,13 @@ namespace EasyControl.Api.Domain.Repository.Classes
                 .OrderBy(a => a.Id)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Areceber>> ObterNaturezasVinculadas(long idNaturezaDeLancamento)
+        {
+            return await _contexto.Areceber.AsNoTracking()
+                .Where(a => a.IdNaturezaDeLancamento == idNaturezaDeLancamento)
+                .OrderBy(a => a.Id)
+                .ToListAsync();
+        }
     }
 }

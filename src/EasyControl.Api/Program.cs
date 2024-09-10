@@ -55,7 +55,7 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     .AddScoped<IApagarRepository, ApagarRepository>()
     .AddScoped<IService<ApagarRequestContract, ApagarResponseContract, long>, ApagarService>()
     .AddScoped<IAreceberRepository, AreceberRepository>()
-    .AddScoped<IService<AreceberRequestContract, AreceberResponseContract, long>, AreceberService>();
+    .AddScoped<IAreceberService, AreceberService>();
 }
 
 // Configura o serviços da API.

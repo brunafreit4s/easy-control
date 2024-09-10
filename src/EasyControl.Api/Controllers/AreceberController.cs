@@ -10,8 +10,8 @@ namespace EasyControl.Api.Controllers
     [Route("titulos-areceber")]
     public class AreceberController : BaseController
     {
-        private readonly IService<AreceberRequestContract, AreceberResponseContract, long> _areceberService;
-        public AreceberController(IService<AreceberRequestContract, AreceberResponseContract, long> AreceberService)
+        private readonly IAreceberService _areceberService;
+        public AreceberController(IAreceberService AreceberService)
         {
             _areceberService = AreceberService;
         }
@@ -40,6 +40,23 @@ namespace EasyControl.Api.Controllers
             {
                 _idUsuario = ObterIdUsuarioLogado();
                 return Ok(await _areceberService.Obter(_idUsuario));
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("naturezas/vinculadas")]
+        [Authorize]
+        public async Task<IActionResult> ObterNaturezasVinculadas(long idNaturezaDeLancamento){
+            try
+            {
+                return Ok(await _areceberService.ObterNaturezasVinculadas(idNaturezaDeLancamento));
             }
             catch(NotFoundException ex){
                 return NotFound(ReturnNotFound(ex));
