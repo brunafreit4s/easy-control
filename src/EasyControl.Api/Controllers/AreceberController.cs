@@ -124,5 +124,22 @@ namespace EasyControl.Api.Controllers
                 return Problem(ex.Message);
             }
         }
+    
+        [HttpGet]
+        [Route("{dataInicial}/{dataFinal}")]
+        [Authorize]
+        public async Task<IActionResult> ObterTitulosPorPeriodo(DateTime dataInicial, DateTime dataFinal){
+            try
+            {
+                return Ok(await _areceberService.ObterTitulosPorPeriodo(dataInicial, dataFinal));
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
     }
 }

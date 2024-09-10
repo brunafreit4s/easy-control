@@ -70,5 +70,13 @@ namespace EasyControl.Api.Domain.Repository.Classes
                 .OrderBy(a => a.Id)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Apagar>> ObterTitulosPorPeriodo(DateTime dataInicio, DateTime dataFim)
+        {
+            return await _contexto.Apagar.AsNoTracking()
+                .Where(a => a.DataCadastro >= dataInicio && a.DataCadastro <= dataFim)
+                .OrderBy(a => a.Id)
+                .ToListAsync();
+        }
     }
 }

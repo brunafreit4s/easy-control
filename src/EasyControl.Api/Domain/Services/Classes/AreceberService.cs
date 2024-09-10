@@ -83,6 +83,16 @@ namespace EasyControl.Api.Domain.Services.Classes
             return listTitulos;
         }   
 
+        public async Task<IEnumerable<AreceberRequestContract>> ObterTitulosPorPeriodo(DateTime dataInicio, DateTime dataFim)
+        {
+            var titulos = await _areceberRepository.ObterTitulosPorPeriodo(dataInicio, dataFim);
+            if(titulos is null || titulos.Count() == 0){
+                throw new NotFoundException($"Não foi encontrado nenhum título no período informado de: {dataInicio} há: {dataFim}" );
+            }
+            var listTitulos = _mapper.Map<IEnumerable<AreceberRequestContract>>(titulos);
+            return listTitulos;
+        } 
+
         private async Task<Areceber> ObterVinculoUsuario(long id, long idUsuario){
             var areceber = await _areceberRepository.Obter(id);
             if (areceber is null || areceber.IdUsuario != idUsuario){
@@ -91,7 +101,7 @@ namespace EasyControl.Api.Domain.Services.Classes
 
             return areceber;
         }
-
+        
         private void Validar(AreceberRequestContract entidade){
             if(entidade.ValorOriginal < 0 || entidade.ValorRecebido < 0) { throw new BadRequestException("Os campos de valor original e valor de recebimento, não podem ser negativos!"); }
         }

@@ -5,5 +5,6 @@ namespace EasyControl.Api.Domain.Services.Interfaces
     public interface IAreceberService : IService<AreceberRequestContract, AreceberResponseContract, long>
     {
         Task<IEnumerable<AreceberRequestContract>> ObterNaturezasVinculadas(long idNaturezaDeLancamento);
+        Task<IEnumerable<AreceberRequestContract>> ObterTitulosPorPeriodo(DateTime dataInicio, DateTime dataFim);
     }
 }

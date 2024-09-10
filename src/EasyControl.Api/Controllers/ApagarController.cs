@@ -109,12 +109,29 @@ namespace EasyControl.Api.Controllers
         }
 
         [HttpGet]
-        [Route("naturezas/vinculadas")]
+        [Route("naturezas/vinculadas/{idNaturezaDeLancamento}")]
         [Authorize]
         public async Task<IActionResult> ObterNaturezasVinculadas(long idNaturezaDeLancamento){
             try
             {
                 return Ok(await _apagarService.ObterNaturezasVinculadas(idNaturezaDeLancamento));
+            }
+            catch(NotFoundException ex){
+                return NotFound(ReturnNotFound(ex));
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{dataInicial}/{dataFinal}")]
+        [Authorize]
+        public async Task<IActionResult> ObterTitulosPorPeriodo(DateTime dataInicial, DateTime dataFinal){
+            try
+            {
+                return Ok(await _apagarService.ObterTitulosPorPeriodo(dataInicial, dataFinal));
             }
             catch(NotFoundException ex){
                 return NotFound(ReturnNotFound(ex));

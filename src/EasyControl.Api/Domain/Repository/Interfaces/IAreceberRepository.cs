@@ -6,5 +6,6 @@ namespace EasyControl.Api.Domain.Repository.Interfaces
     {
         Task<IEnumerable<Areceber>> ObterPeloIdUsuario(long idUsuario);
         Task<IEnumerable<Areceber>> ObterNaturezasVinculadas(long IdNaturezaDeLancamento);
+        Task<IEnumerable<Areceber>> ObterTitulosPorPeriodo(DateTime dataInicio, DateTime dataFim);
     }
 }

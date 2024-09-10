@@ -91,6 +91,16 @@ namespace EasyControl.Api.Domain.Services.Classes
             var listTitulos = _mapper.Map<IEnumerable<ApagarRequestContract>>(titulos);
             return listTitulos;
         }  
+
+        public async Task<IEnumerable<ApagarRequestContract>> ObterTitulosPorPeriodo(DateTime dataInicio, DateTime dataFim)
+        {
+            var titulos = await _apagarRepository.ObterTitulosPorPeriodo(dataInicio, dataFim);
+            if(titulos is null || titulos.Count() == 0){
+                throw new NotFoundException($"Não foi encontrado nenhum título no período informado de: {dataInicio} há: {dataFim}" );
+            }
+            var listTitulos = _mapper.Map<IEnumerable<ApagarRequestContract>>(titulos);
+            return listTitulos;
+        } 
     
         private void Validar(ApagarRequestContract entidade){
             if(entidade.ValorOriginal < 0 || entidade.ValorPago < 0) { throw new BadRequestException("Os campos de valor original e valor de recebimento, não podem ser negativos!"); }
