@@ -1,6 +1,6 @@
 # easy-control
 
-> Aplicação API em .NET Core 7 + EFCore 7
+> Projeto do tipo API para controle fácil de lançamentos em .NET Core 7 + EFCore 7
 
 ## Iniciar o Projeto:
 
