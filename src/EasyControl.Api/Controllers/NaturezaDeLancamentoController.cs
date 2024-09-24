@@ -92,7 +92,9 @@ namespace EasyControl.Api.Controllers
             try
             {
                 _idUsuario = ObterIdUsuarioLogado();
-                return Ok(await _naturezaDeLancamentoService.Atualizar(id, contract, _idUsuario));
+                _ = await _naturezaDeLancamentoService.Atualizar(id, contract, _idUsuario);
+                return NoContent();
+                //return Ok(await _naturezaDeLancamentoService.Atualizar(id, contract, _idUsuario));
             }
             catch(NotFoundException ex){
                 return NotFound(ReturnNotFound(ex));

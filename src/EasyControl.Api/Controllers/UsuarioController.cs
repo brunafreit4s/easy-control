@@ -89,7 +89,9 @@ namespace EasyControl.Api.Controllers
         public async Task<IActionResult> Atualizar(long id, UsuarioRequestContract contract){
             try
             {
-                return Ok(await _usuarioService.Atualizar(id, contract, 0));
+                _ = await _usuarioService.Atualizar(id, contract, 0);
+                return NoContent();
+                //return Ok(await _usuarioService.Atualizar(id, contract, 0));
             }
             catch(NotFoundException ex){
                 return NotFound(ReturnNotFound(ex));
